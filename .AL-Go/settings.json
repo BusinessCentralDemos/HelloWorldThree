@@ -8,7 +8,6 @@
     "CodeSignCertificateUrlSecretName":  "CodeSignCertificateUrl",
     "CodeSignCertificatePasswordSecretName":  "CodeSignCertificatePassword",
     "appFolders":  [
-        "HelloWorld3"
     ],
     "testFolders":  [
     ],
