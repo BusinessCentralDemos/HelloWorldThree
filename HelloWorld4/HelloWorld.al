@@ -9,7 +9,7 @@ pageextension 70074166 MS_CustomerListExt4 extends "Customer List"
         Message('App published: Hello world');
     end;
 }
-permissionset 70074166 "MS_4Mypermissionset"
+permissionset 70074165 "MS_4Mypermissionset"
 {
     Assignable = true;
     Caption = 'sample permission set';
@@ -17,7 +17,7 @@ permissionset 70074166 "MS_4Mypermissionset"
     Permissions = codeunit MS_4MyCodeunit = X;
 }
 
-permissionset 70074167 "MS_4MySuper"
+permissionset 70074166 "MS_4MySuper"
 {
     Assignable = true;
     Caption = 'super permission set';
