@@ -9,35 +9,35 @@ pageextension 70074166 MS_CustomerListExt4 extends "Customer List"
         Message('App published: Hello world');
     end;
 }
-permissionset 70074166 "MS_Mypermissionset"
+permissionset 70074166 "MS_4Mypermissionset"
 {
     Assignable = true;
     Caption = 'sample permission set';
 
-    Permissions = codeunit MS_MyCodeunit = X;
+    Permissions = codeunit MS_4MyCodeunit = X;
 }
 
-permissionset 70074167 "MS_MySuper"
+permissionset 70074167 "MS_4MySuper"
 {
     Assignable = true;
     Caption = 'super permission set';
     Permissions = page * = X;
 }
 
-entitlement "MS_MyOfferEntitlement"
+entitlement "MS_4MyOfferEntitlement"
 {
     Type = PerUserOfferPlan;
     Id = '110922bctransact in test_test_pmc2pc';
-    ObjectEntitlements = "MS_Mypermissionset";
+    ObjectEntitlements = "MS_4Mypermissionset";
 }
 
-entitlement "MS_MyEntitlement"
+entitlement "MS_4MyEntitlement"
 {
     Type = PerUserServicePlan;
     Id = '3f2afeed-6fb5-4bf9-998f-f2912133aead';
-    ObjectEntitlements = "MS_MySuper";
+    ObjectEntitlements = "MS_4MySuper";
 }
-codeunit 70074167 MS_MyCodeunit
+codeunit 70074167 MS_4MyCodeunit
 {
     trigger OnRun()
     begin
@@ -45,7 +45,7 @@ codeunit 70074167 MS_MyCodeunit
     end;
 }
 
-page 70074167 MS_SampleCustomerCard
+page 70074167 MS_4SampleCustomerCard
 {
     PageType = Card;
     ApplicationArea = All;
