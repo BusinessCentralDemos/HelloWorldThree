@@ -10,35 +10,35 @@ pageextension 70074167 MS_CustomerListExt3 extends "Customer List"
     end;
 }
 
-permissionset 70074167 "Mypermissionset"
+permissionset 70074167 "MS_Mypermissionset"
 {
     Assignable = true;
     Caption = 'sample permission set';
 
-    Permissions = codeunit MyCodeunit = X;
+    Permissions = codeunit MS_MyCodeunit = X;
 }
 
-permissionset 70074168 "MypermissionsetSuper"
+permissionset 70074168 "MS_MySuper"
 {
     Assignable = true;
     Caption = 'super permission set';
     Permissions = page * = X;
 }
 
-entitlement "MyOfferEntitlement"
+entitlement "MS_MyOfferEntitlement"
 {
     Type = PerUserOfferPlan;
     Id = 'mdcc1667400477212.kckofferid.planidkck';
-    ObjectEntitlements = "Mypermissionset";
+    ObjectEntitlements = "MS_Mypermissionset";
 }
 
-entitlement "MyEntitlement"
+entitlement "MS_MyEntitlement"
 {
     Type = PerUserServicePlan;
     Id = '3f2afeed-6fb5-4bf9-998f-f2912133aead';
-    ObjectEntitlements = "MypermissionsetSuper";
+    ObjectEntitlements = "MS_MySuper";
 }
-codeunit 70074168 MyCodeunit
+codeunit 70074168 MS_MyCodeunit
 {
     trigger OnRun()
     begin
@@ -46,7 +46,7 @@ codeunit 70074168 MyCodeunit
     end;
 }
 
-page 70074168 SampleCustomerCard
+page 70074168 MS_SampleCustomerCard
 {
     PageType = Card;
     ApplicationArea = All;
