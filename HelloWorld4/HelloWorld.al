@@ -24,10 +24,24 @@ permissionset 70074166 "MS_4MySuper"
     Permissions = page * = X;
 }
 
-entitlement "MS_4MyOfferEntitlement"
+entitlement "MS_4MyOfferPlan2"
 {
     Type = PerUserOfferPlan;
-    Id = '110922bctransact in test_test_pmc2pc';
+    Id = 'test_test_pmc2pc1.110922bctransact.testplan2';
+    ObjectEntitlements = "MS_4Mypermissionset";
+}
+
+entitlement "MS_4MyOfferPublic2"
+{
+    Type = PerUserOfferPlan;
+    Id = 'test_test_pmc2pc1.110922bctransact.testpublic2';
+    ObjectEntitlements = "MS_4Mypermissionset";
+}
+
+entitlement "MS_4MyOfferTest1"
+{
+    Type = PerUserOfferPlan;
+    Id = 'test_test_pmc2pc1.110922bctransact.test1';
     ObjectEntitlements = "MS_4Mypermissionset";
 }
 
