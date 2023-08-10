@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       templateUrl:
-        description: Template Repository URL (current is https://github.com/microsoft/AL-Go-AppSource@main)
+        description: Template Repository URL (current is {TEMPLATEURL})
         required: false
         default: ''
       directCommit:
@@ -17,7 +17,11 @@ permissions:
 
 defaults:
   run:
-    shell: PowerShell
+    shell: powershell
+
+env:
+  ALGoOrgSettings: ${{ vars.ALGoOrgSettings }}
+  ALGoRepoSettings: ${{ vars.ALGoRepoSettings }}
 
 jobs:
   UpdateALGoSystemFiles:
@@ -28,34 +32,35 @@ jobs:
 
       - name: Initialize the workflow
         id: init
-        uses: microsoft/AL-Go-Actions/WorkflowInitialize@v2.2
+        uses: microsoft/AL-Go/Actions/WorkflowInitialize@d15c25e25c4b0033da9f99970e3a420e231f7fbc
         with:
+          shell: powershell
           eventId: "DO0098"
 
       - name: Read settings
-        uses: microsoft/AL-Go-Actions/ReadSettings@v2.2
+        uses: microsoft/AL-Go/Actions/ReadSettings@d15c25e25c4b0033da9f99970e3a420e231f7fbc
         with:
+          shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
-          get: KeyVaultName,GhTokenWorkflowSecretName,TemplateUrl
+          get: templateUrl
 
       - name: Read secrets
-        uses: microsoft/AL-Go-Actions/ReadSecrets@v2.2
-        env:
-          secrets: ${{ toJson(secrets) }}
+        uses: microsoft/AL-Go/Actions/ReadSecrets@d15c25e25c4b0033da9f99970e3a420e231f7fbc
         with:
+          shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
-          settingsJson: ${{ env.Settings }}
-          secrets: 'ghTokenWorkflow=${{ env.GHTOKENWORKFLOWSECRETNAME }}'
+          gitHubSecrets: ${{ toJson(secrets) }}
+          getSecrets: 'ghTokenWorkflow'
 
-      - name: Override TemplateUrl
+      - name: Override templateUrl
         env:
           templateUrl: ${{ github.event.inputs.templateUrl }}
         run: |
-          $ErrorActionPreference = "STOP"
+          $errorActionPreference = "Stop"; $ProgressPreference = "SilentlyContinue"; Set-StrictMode -Version 2.0
           $templateUrl = $ENV:templateUrl
           if ($templateUrl) {
             Write-Host "Using Template Url: $templateUrl"
-            Add-Content -Path $env:GITHUB_ENV -Value "TemplateUrl=$templateUrl"
+            Add-Content -Encoding UTF8 -Path $env:GITHUB_ENV -Value "templateUrl=$templateUrl"
           }
 
       - name: Calculate DirectCommit
@@ -63,27 +68,29 @@ jobs:
           directCommit: ${{ github.event.inputs.directCommit }}
           eventName: ${{ github.event_name }}
         run: |
-          $ErrorActionPreference = "STOP"
+          $errorActionPreference = "Stop"; $ProgressPreference = "SilentlyContinue"; Set-StrictMode -Version 2.0
           $directCommit = $ENV:directCommit
           Write-Host $ENV:eventName
           if ($ENV:eventName -eq 'schedule') {
             Write-Host "Running Update AL-Go System Files on a schedule. Setting DirectCommit = Y"
             $directCommit = 'Y'
           }
-          Add-Content -Path $env:GITHUB_ENV -Value "DirectCommit=$directCommit"
+          Add-Content -Encoding UTF8 -Path $env:GITHUB_ENV -Value "DirectCommit=$directCommit"
 
       - name: Update AL-Go system files
-        uses: microsoft/AL-Go-Actions/CheckForUpdates@v2.2
+        uses: microsoft/AL-Go/Actions/CheckForUpdates@d15c25e25c4b0033da9f99970e3a420e231f7fbc
         with:
+          shell: powershell
           parentTelemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
-          token: ${{ env.ghTokenWorkflow }}
+          token: ${{ fromJson(env.Secrets).ghTokenWorkflow }}
           Update: Y
-          templateUrl: ${{ env.TemplateUrl }}
+          templateUrl: ${{ env.templateUrl }}
           directCommit: ${{ env.directCommit }}
 
       - name: Finalize the workflow
         if: always()
-        uses: microsoft/AL-Go-Actions/WorkflowPostProcess@v2.2
+        uses: microsoft/AL-Go/Actions/WorkflowPostProcess@d15c25e25c4b0033da9f99970e3a420e231f7fbc
         with:
+          shell: powershell
           eventId: "DO0098"
           telemetryScopeJson: ${{ steps.init.outputs.telemetryScopeJson }}
